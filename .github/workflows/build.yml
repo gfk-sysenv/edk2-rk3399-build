@@ -24,7 +24,7 @@ jobs:
         mkdir workspace-edk2
         cd workspace-edk2
         git config --global protocol.file.allow always
-        git clone https://github.com/tianocore/edk2.git  --recursive --depth=1
+        git clone https://github.com/tianocore/edk2.git  --recursive 
         cd edk2
         git checkout 4ac0296
         cd ..
