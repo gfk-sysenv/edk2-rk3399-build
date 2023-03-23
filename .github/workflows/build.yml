@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt remove git
+        sudo apt remove git python3
         sudo apt autoremove
         sudo apt install -y git build-essential uuid-dev iasl git nasm python3-distutils gcc-7-aarch64-linux-gnu
 
