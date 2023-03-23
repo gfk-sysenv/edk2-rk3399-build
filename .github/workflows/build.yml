@@ -18,15 +18,15 @@ jobs:
         sudo apt update
         sudo apt remove git
         sudo apt autoremove
-        sudo apt install -y git build-essential uuid-dev iasl git nasm python3-distutils gcc-aarch64-linux-gnu
+        sudo apt install -y git build-essential uuid-dev iasl git nasm python3-distutils gcc-7-aarch64-linux-gnu
 
     - name: Clone repositories
       run: |
         mkdir workspace-edk2
         cd workspace-edk2
         git config --global protocol.file.allow always
-        git clone https://github.com/tianocore/edk2.git -o fea7901 --recursive --depth=1
-        git clone https://github.com/tianocore/edk2-platforms.git -o 086a3a3 --recursive --depth=1
+        git clone https://github.com/tianocore/edk2.git -o 3a3713e62cfad00d78bb938b0d9fb1eedaeff314 --recursive --depth=1
+        git clone https://github.com/tianocore/edk2-platforms.git -o cfdc7f907d545b14302295b819ea078bc36c6a40 --recursive --depth=1
         git clone https://github.com/mouseos/edk2-rk3399
 
     - name: Build edk2-rk3399
