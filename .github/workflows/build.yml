@@ -33,9 +33,9 @@ jobs:
       run: |
         bash build.sh --device polaris
     - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: zmooth-edk2
-          path: |
-            workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd
-          if-no-files-found: ignore
+      uses: actions/upload-artifact@v3
+      with:
+        name: zmooth-edk2
+        path: |
+          workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd
+        if-no-files-found: ignore
