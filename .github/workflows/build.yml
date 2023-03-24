@@ -37,5 +37,5 @@ jobs:
       with:
         name: zmooth-edk2
         path: |
-          workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd
+          edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd
         if-no-files-found: ignore
