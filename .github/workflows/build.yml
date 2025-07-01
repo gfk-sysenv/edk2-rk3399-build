@@ -47,7 +47,7 @@ jobs:
       with:
         # https://gitee.com/ci-actions/docker-setup-qemu-action/tree/v2/
         # image: tonistiigi/binfmt:latest
-        image: registry.cn-shenzhen.aliyuncs.com/infrasync/tonistiigi-binfmt:latest
+        # image: registry.cn-shenzhen.aliyuncs.com/infrasync/tonistiigi-binfmt:latest
         # platforms: arm,arm64,ppc64le,mips64,s390x
         platforms: arm,arm64
 
@@ -61,8 +61,8 @@ jobs:
         # platforms: linux/amd64,linux/arm64
         # pull-img-err: moby/buildkit:buildx-stable-1
           # image=moby/buildkit:master
+          # image=registry.cn-shenzhen.aliyuncs.com/infrasync/moby-buildkit:buildx-stable-1
         driver-opts: |
-          image=registry.cn-shenzhen.aliyuncs.com/infrasync/moby-buildkit:buildx-stable-1
           network=host
 
     - name: Call buildx.sh(build with ali's cache, push)
@@ -84,7 +84,7 @@ jobs:
         test -z "$TZ" || echo "${TZ}" | sudo tee /etc/timezone
         test -z "$TZ" || sudo ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime
         date #view2 
-        
+
         docker build -t t1 -f Dockerfile .  
 
     # - name: Upload
