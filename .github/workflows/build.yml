@@ -37,13 +37,13 @@ jobs:
     #   run: |
     #     bash build.sh --device polaris
     #     # mv /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd  /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
-    # - uses: actions/checkout@v3
-    - uses: https://gitee.com/ci-actions/checkout@v3
+    - uses: actions/checkout@v3
+    # - uses: https://gitee.com/ci-actions/checkout@v3
     
     - name: Setup QEMU
       # uses: docker/setup-qemu-action@v1
-      # uses: docker/setup-qemu-action@v2 #ref docker-baseimage-gui
-      uses: https://gitee.com/ci-actions/docker-setup-qemu-action@v2
+      uses: docker/setup-qemu-action@v2 #ref docker-baseimage-gui
+      # uses: https://gitee.com/ci-actions/docker-setup-qemu-action@v2
       with:
         # https://gitee.com/ci-actions/docker-setup-qemu-action/tree/v2/
         # image: tonistiigi/binfmt:latest
@@ -53,8 +53,8 @@ jobs:
 
     - name: Setup Docker Buildx
       # uses: docker/setup-buildx-action@
-      # uses: docker/setup-buildx-action@v2
-      uses: https://gitee.com/ci-actions/docker-setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v2
+      # uses: https://gitee.com/ci-actions/docker-setup-buildx-action@v2
       with:
         # driver-opts: network=host
         # https://gitee.com/ci-actions/docker-setup-buildx-action/tree/v2/
@@ -84,6 +84,7 @@ jobs:
         test -z "$TZ" || echo "${TZ}" | sudo tee /etc/timezone
         test -z "$TZ" || sudo ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime
         date #view2 
+        
         docker build -t t1 -f Dockerfile .  
 
     # - name: Upload
