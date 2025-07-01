@@ -13,10 +13,12 @@ RUN \
   mkdir -p workspace-edk2; cd workspace-edk2; \
   # git config --global protocol.file.allow always; \
   
+  # https://github.com/strongtz/edk2-rk3399/issues/6
   # git clone https://github.com/tianocore/edk2.git -b edk2-stable202002 --recursive --depth=1; \
   # https://github.com/strongtz/edk2-rk3399/issues/1
   git clone https://github.com/tianocore/edk2.git --recursive; \
   cd edk2; git checkout 3a3713e62cfad00d78bb938b0d9fb1eedaeff314; cd ../; \
+  
   git clone https://github.com/tianocore/edk2-platforms.git -o cfdc7f907d545b14302295b819ea078bc36c6a40 --recursive --depth=1; \
   git clone https://github.com/strongtz/edk2-rk3399;
         
