@@ -5,7 +5,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -33,11 +32,37 @@ jobs:
       working-directory: workspace-edk2/edk2-rk3399
       run: |
         bash build.sh --device polaris
-        mv /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd  /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
-    - name: Upload
-      uses: actions/upload-artifact@v3
+        # mv /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd  /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
+    # - name: Upload
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: zmooth-edk2
+    #     path: |
+    #       /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
+    #     if-no-files-found: ignore
+    # ###############################################
+    - name: create github release
+      id: new_release
+      uses: softprops/action-gh-release@v2 #v2.0.8
+      # if: startsWith(github.ref, 'refs/tags/')
       with:
-        name: zmooth-edk2
-        path: |
-          /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
-        if-no-files-found: ignore
+        name: latest
+        tag_name: v25.07
+        make_latest: true
+        token: ${{ github.token }} #Defaults to ${{ github.token }}
+        body: |
+          Automated release-2025 for tag ${{ github.ref }}          
+        # append_body
+        # generate_release_notes
+        draft: false
+        prerelease: false
+        preserve_order: true
+        fail_on_unmatched_files: false
+        # repository:  #Defaults to GITHUB_REPOSITORY env variable
+        # body_path: 
+        # target_commitish
+        # files: ebook.pdf
+        files: |
+          # ebook.pdf
+          # LICENSE
+          workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd
