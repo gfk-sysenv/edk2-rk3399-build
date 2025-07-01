@@ -1,5 +1,5 @@
 ARG VER=20.04
-FROM registry.cn-shenzhen.aliyuncs.com/infrasync/library-ubuntu:${VER}
+FROM registry.cn-shenzhen.aliyuncs.com/infrasync/v2025:library--ubuntu---${VER}
 ARG TARGETPLATFORM
 ENV \
   DEBIAN_FRONTEND=noninteractive
