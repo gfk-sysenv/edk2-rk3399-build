@@ -6,35 +6,86 @@ on:
 jobs:
   build:
     # runs-on: ubuntu-latest
+    # This is a scheduled Ubuntu 20.04 retirement. Ubuntu 20.04 LTS runner will be removed on 2025-04-15. For more details, see https://github.com/actions/runner-images/issues/11101
+    # runs-on: ubuntu-20.04
     runs-on: ubuntu-22.04
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+    # - name: Checkout
+    #   uses: actions/checkout@v3
 
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt remove git
-        sudo apt autoremove
-        # ubt-latest: E: Package 'python3-distutils' has no installation candidate
-        sudo apt install -y git build-essential uuid-dev iasl git nasm python3-distutils gcc-aarch64-linux-gnu
+    # - name: Install dependencies
+    #   run: |
+    #     sudo apt update
+    #     sudo apt remove git
+    #     sudo apt autoremove
+    #     # ubt-latest: E: Package 'python3-distutils' has no installation candidate
+    #     sudo apt install -y git build-essential uuid-dev iasl git nasm python3-distutils gcc-aarch64-linux-gnu
 
-    - name: Clone repositories
-      run: |
-        mkdir workspace-edk2
-        cd workspace-edk2
-        git config --global protocol.file.allow always
-        git clone https://github.com/tianocore/edk2.git -b edk2-stable202002 --recursive --depth=1
-        git clone https://github.com/tianocore/edk2-platforms.git -o cfdc7f907d545b14302295b819ea078bc36c6a40 --recursive --depth=1
-        git clone https://github.com/strongtz/edk2-rk3399
+    # - name: Clone repositories
+    #   run: |
+    #     mkdir workspace-edk2
+    #     cd workspace-edk2
+    #     git config --global protocol.file.allow always
+    #     git clone https://github.com/tianocore/edk2.git -b edk2-stable202002 --recursive --depth=1
+    #     git clone https://github.com/tianocore/edk2-platforms.git -o cfdc7f907d545b14302295b819ea078bc36c6a40 --recursive --depth=1
+    #     git clone https://github.com/strongtz/edk2-rk3399
         
 
-    - name: Build edk2-rk3399
-      working-directory: workspace-edk2/edk2-rk3399
+    # - name: Build edk2-rk3399
+    #   working-directory: workspace-edk2/edk2-rk3399
+    #   run: |
+    #     bash build.sh --device polaris
+    #     # mv /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd  /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
+    # - uses: actions/checkout@v3
+    - uses: https://gitee.com/ci-actions/checkout@v3
+    
+    - name: Setup QEMU
+      # uses: docker/setup-qemu-action@v1
+      # uses: docker/setup-qemu-action@v2 #ref docker-baseimage-gui
+      uses: https://gitee.com/ci-actions/docker-setup-qemu-action@v2
+      with:
+        # https://gitee.com/ci-actions/docker-setup-qemu-action/tree/v2/
+        # image: tonistiigi/binfmt:latest
+        image: registry.cn-shenzhen.aliyuncs.com/infrasync/tonistiigi-binfmt:latest
+        # platforms: arm,arm64,ppc64le,mips64,s390x
+        platforms: arm,arm64
+
+    - name: Setup Docker Buildx
+      # uses: docker/setup-buildx-action@
+      # uses: docker/setup-buildx-action@v2
+      uses: https://gitee.com/ci-actions/docker-setup-buildx-action@v2
+      with:
+        # driver-opts: network=host
+        # https://gitee.com/ci-actions/docker-setup-buildx-action/tree/v2/
+        # platforms: linux/amd64,linux/arm64
+        # pull-img-err: moby/buildkit:buildx-stable-1
+          # image=moby/buildkit:master
+        driver-opts: |
+          image=registry.cn-shenzhen.aliyuncs.com/infrasync/moby-buildkit:buildx-stable-1
+          network=host
+
+    - name: Call buildx.sh(build with ali's cache, push)
       run: |
-        bash build.sh --device polaris
-        # mv /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/SDM845PKG_UEFI.fd  /home/runner/work/rk3399-edk2-build/rk3399-edk2-build/workspace-edk2/edk2-rk3399/workspace/Build/sdm845Pkg/DEBUG_GCC5/FV/RK3399_ZMOOTH_UEFI.fd
+        # VARS
+        echo ${{ github.repository_owner }} #infrastlabs
+        echo ${{ github.repository }}
+        echo ${{ secrets.DOCKER_REGISTRY_PW_DOCKERHUB }} #fill not show in log
+        # INFO
+        set +e
+        pwd && ls -l
+        docker version
+        free -h; df -h; ip a |grep inet; uname -a;
+        docker image prune -a -f; df -h
+        set -e
+        # TZ
+        date #view1
+        export TZ=Asia/Shanghai  
+        test -z "$TZ" || echo "${TZ}" | sudo tee /etc/timezone
+        test -z "$TZ" || sudo ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime
+        date #view2 
+        docker build -t t1 -f Dockerfile .  
+
     # - name: Upload
     #   uses: actions/upload-artifact@v3
     #   with:
