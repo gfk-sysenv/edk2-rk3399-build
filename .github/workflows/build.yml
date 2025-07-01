@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     # runs-on: ubuntu-latest
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout
@@ -17,6 +17,7 @@ jobs:
         sudo apt update
         sudo apt remove git
         sudo apt autoremove
+        # ubt-latest: E: Package 'python3-distutils' has no installation candidate
         sudo apt install -y git build-essential uuid-dev iasl git nasm python3-distutils gcc-aarch64-linux-gnu
 
     - name: Clone repositories
